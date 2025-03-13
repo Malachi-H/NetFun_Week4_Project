@@ -5,7 +5,7 @@ serverSocket = socket(AF_INET, SOCK_STREAM)
 
 #Fill in start
 #Fill in end
-
+# i was here
 while True:
     #Establish the connection
     print('Ready to serve...')
