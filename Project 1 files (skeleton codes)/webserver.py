@@ -5,7 +5,7 @@ serverSocket = socket(AF_INET, SOCK_STREAM)
 
 #Fill in start
 serverPort = 8080
-serverSocket.blind(('', serverPort))
+serverSocket.bind(('', serverPort))
 serverSocket.listen(1)
 #Fill in end
 
@@ -20,7 +20,7 @@ while True:
         outputdata = f.read() #Fill in start       #Fill in end                   
 
         #Send one HTTP header line into socket
-        connectionSocket.send('HTTP/1.1 200 OK\r\nContent-Type:text')
+        connectionSocket.send('HTTP/1.1 200 OK\r\nContent-Type:text/html/\r\n\r\n'.encode())
         
         #Fill in start
         #Fill in end                
@@ -34,9 +34,12 @@ while True:
         #Send response message for file not found
         
         #Fill in start        
+        connectionSocket.send('HTTP/1.1 404 Not Found\r\nContent-Type:text/html\r\n\r\n'.encode())
+        connectionSocket.send('<html><head></head><body><h1>404 Not Found</h1></body></html>'.encode())
         
         #Fill in end
         #Close client socket
+        connectionSocket.close()
         
         #Fill in start
         #Fill in end 
