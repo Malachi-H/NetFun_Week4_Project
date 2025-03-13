@@ -4,20 +4,23 @@ serverSocket = socket(AF_INET, SOCK_STREAM)
 #Prepare a sever socket
 
 #Fill in start
+serverPort = 8080
+serverSocket.blind(('', serverPort))
+serverSocket.listen(1)
 #Fill in end
-# i was here
 
-I was also here
 while True:
     #Establish the connection
     print('Ready to serve...')
-    connectionSocket, addr =   #Fill in start              #Fill in end          
+    connectionSocket, addr = serverSocket.accept()   #Fill in start              #Fill in end          
     try:
-        message =   #Fill in start          #Fill in end               
+        message = connectionSocket.recv(1024).decode()   #Fill in start          #Fill in end               
         filename = message.split()[1]                 
         f = open(filename[1:])                        
-        outputdata = #Fill in start       #Fill in end                   
+        outputdata = f.read() #Fill in start       #Fill in end                   
+
         #Send one HTTP header line into socket
+        connectionSocket.send('HTTP/1.1 200 OK\r\nContent-Type:text')
         
         #Fill in start
         #Fill in end                
