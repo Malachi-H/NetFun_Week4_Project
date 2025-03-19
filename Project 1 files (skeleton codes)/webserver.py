@@ -51,7 +51,7 @@ while True:
 
         # Send one HTTP header line into socket
         connectionSocket.send(
-            "HTTP/1.1 200 OK\r\nContent-Type:text/html/\r\n\r\n".encode() #! What does the 1.1 here mean? We learn it in class but I've forgotten. (THIS IS A LIKELY QUESTION) IDK
+            "HTTP/1.1 200 OK\r\nContent-Type:text/html\r\n\r\n".encode() #! What does the 1.1 here mean? We learn it in class but I've forgotten. (THIS IS A LIKELY QUESTION) IDK
         )
 
         # Send the content of the requested file to the client
