@@ -1,14 +1,21 @@
 # import socket module
 from socket import *  # type: ignore
 
-serverSocket = socket(AF_INET, SOCK_STREAM)  #! what do the flags here do? IDK
 # Prepare a sever socket
+serverSocket = socket(AF_INET, SOCK_STREAM)
+# AF_INET = Address_Family_Internet. It says the socket should use an IPv4 Address (eg. 100.50.200.5) or a Hostname (eg. google.com)
+# SOCK_STREAM says the socket should use TCP instead of UDP (SOCK_DGRAM)
 
-serverPort = 8081  #! Does the port number here matter as long as we are have the same number in our localhost url (http://localhost:8080)? IDK
-serverSocket.bind(
-    ("", serverPort)
-)  #! Why don't we need a local(?) ip address in the blind procedure here. IDK. What is bind actually binding to? What is bind? IDK
-serverSocket.listen(1)  #! What is the 1 here doing? IDK
+serverPort = 8080
+# port number is used to announce the type of connection. eg. SMTP uses port 25.
+# port 80 is the protocol for HTTP, but it often blocked by ISP's or web-browsers, so 8080 or 8008 are used instead.
+
+serverSocket.bind(("", serverPort))
+# tells the socket to listen to "serverPort" and receive packets from all interfaces (what is an interface? IDK)
+# "" is a special form that is interpreted by the socket module as "INADDR_ANY" (In_Address_Any). This is used to keep the isolation between application and network layers (I think). So The program doesn't care what network interface is being used to send an receive, as long as it's a TCP connection coming through the "serverPort" port.
+serverSocket.listen(1)  
+# tells the server to start listening for connection requests.
+# the "1" is the length of the queue (0 indexed so length is 2 connections). If a second person tries to connect to the server (load the webpage) while the first person's request is still being processed, they will be put in the queue and processed after the first person's webpage is loaded. 
 
 while True:
     # Establish the connection
@@ -51,7 +58,7 @@ while True:
 
         # Send one HTTP header line into socket
         connectionSocket.send(
-            "HTTP/1.1 200 OK\r\nContent-Type:text/html\r\n\r\n".encode() #! What does the 1.1 here mean? We learn it in class but I've forgotten. (THIS IS A LIKELY QUESTION) IDK
+            "HTTP/1.1 200 OK\r\nContent-Type:text/html\r\n\r\n".encode()  #! What does the 1.1 here mean? We learn it in class but I've forgotten. (THIS IS A LIKELY QUESTION) IDK
         )
 
         # Send the content of the requested file to the client
@@ -63,7 +70,7 @@ while True:
         connectionSocket.send(
             "\r\n".encode()
         )  #! What does \r mean and why is \r\n used? Does it indicate the end of a chunk of data? It was used earlier when sending the heading, but repeated twice. WHy is that? IDK
-        connectionSocket.close() #! can connectionSocket be managed using a context manager like: `with open("filename", "r") as file`
+        connectionSocket.close()  #! can connectionSocket be managed using a context manager like: `with open("filename", "r") as file`
     except IOError:
         # Send response message for file not found
 
