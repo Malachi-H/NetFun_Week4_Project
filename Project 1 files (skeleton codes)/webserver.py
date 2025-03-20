@@ -13,23 +13,25 @@ serverPort = 8080
 serverSocket.bind(("", serverPort))
 # tells the socket to listen to "serverPort" and receive packets from all interfaces (what is an interface? IDK)
 # "" is a special form that is interpreted by the socket module as "INADDR_ANY" (In_Address_Any). This is used to keep the isolation between application and network layers (I think). So The program doesn't care what network interface is being used to send an receive, as long as it's a TCP connection coming through the "serverPort" port.
-serverSocket.listen(1)  
+serverSocket.listen(1)
 # tells the server to start listening for connection requests.
-# the "1" is the length of the queue (0 indexed so length is 2 connections). If a second person tries to connect to the server (load the webpage) while the first person's request is still being processed, they will be put in the queue and processed after the first person's webpage is loaded. 
+# the "1" is the length of the queue (0 indexed so length is 2 connections). If a second person tries to connect to the server (load the webpage) while the first person's request is still being processed, they will be put in the queue and processed after the first person's webpage is loaded.
 
 while True:
     # Establish the connection
     print("Ready to serve...")
     connectionSocket, addr = serverSocket.accept()
-    # connectionSocket = <socket.socket. fd=728, family=2, type=1, proto=0, laddr=('127.0.0.1', 8080), raddr=('127.0.0.1', 51284)>, 
-        # class instance of Socket that allows communication with the specific client. 
-        # create a new instance instead of binding the "serverSocket" to the specific client, because "serverSocket" still needs to listen for other clients.
+    # connectionSocket = <socket.socket. fd=728, family=2, type=1, proto=0, laddr=('127.0.0.1', 8080), raddr=('127.0.0.1', 51284)>,
+    # class instance of Socket that allows communication with the specific client.
+    # create a new instance instead of binding the "serverSocket" to the specific client, because "serverSocket" still needs to listen for other clients.
     # addr = ('127.0.0.1', 51284)
-        # addr is a return address and port number of the client that connected to the server. It isn't used because this information is already stored int he returned socket class instance "connectionSocket"
+    # addr is a return address and port number of the client that connected to the server. It isn't used because this information is already stored int he returned socket class instance "connectionSocket"
     try:
         message = connectionSocket.recv(
-            1024  #! Why 1024? IDK
+            1024
         ).decode()  #! What is it decoding from Binary? IDK
+        # 1024 is the number of bytes to receive from the client. 1024 is just the conventional number to use. I tested and the webpage loads with as little as 19 bytes allocated. I'm not sure how that works given the returned message is far more than 19 bytes IDK. The upper limit is just how much memory the server has. Exceeding give "Exception has occurred: MemoryError"
+        # decode is called to convert the transmitted binary message into utf-8 (human readable english characters) (received from the transport layer in binary so have to convert back to ascii for the application layer.)
         # message looks something like the following:
         """
         GET /simpleWeb.html HTTP/1.1
@@ -49,6 +51,7 @@ while True:
         Accept-Encoding: gzip, deflate, br, zstd
         Accept-Language: en-GB,en-US;q=0.9,en;q=0.8
         """
+
         filename = message.split()[1]
         # calling split and getting the second element gets the file name (url path) that the client is requesting.
         # in this case it's "/simpleweb.html"
