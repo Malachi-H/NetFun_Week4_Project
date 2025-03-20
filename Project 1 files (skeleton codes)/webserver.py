@@ -72,15 +72,13 @@ while True:
         # the after the connection with the client is established, the server sends back the above header to indicate the success. HTTP is the protocol, 1.1 is the protocol version, 200 is the status message with means OK. Content-Type tells the client what type of message it should expect to receive from the server. \r\n\r\n indicates the end of the header information.
 
         # Send the content of the requested file to the client
-        #! Why is it encoding and sending the characters 1 by 1 instead of encoding them all and sending them all in one "send"? IDK
         for i in range(0, len(outputdata)):  # the 0 here is unneeded.
             connectionSocket.send(
                 outputdata[i].encode()
             )  # * Seems to send character by character, encoded using utf-8. (I think the encoding means new lines are converted to \n ect. but IDK)
-        connectionSocket.send(
-            "\r\n".encode()
-        )  #! What does \r mean and why is \r\n used? Does it indicate the end of a chunk of data? It was used earlier when sending the heading, but repeated twice. WHy is that? IDK
-        connectionSocket.close()  #! can connectionSocket be managed using a context manager like: `with open("filename", "r") as file`
+        connectionSocket.send("\r\n".encode())
+        # sent to indicate the end of the header
+        connectionSocket.close()
     except IOError:
         # Send response message for file not found
 
@@ -93,6 +91,5 @@ while True:
 
         connectionSocket.close()
 
-#! Why have this if it's outside of the while true loop? It'll never run. IDK
 serverSocket.close()
 sys.exit()  # Terminate the program after sending the corresponding data
