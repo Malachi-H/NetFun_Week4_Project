@@ -59,7 +59,7 @@ while True:
         # added to redirect the file if no file path is given
         if filename == "/":
             filename = "/index.html"
-        
+
         f = open(filename[1:])
         # open's the file (removes the slash) (using open with would have been better I think)
         outputdata = f.read()
@@ -67,8 +67,9 @@ while True:
 
         # Send one HTTP header line into socket
         connectionSocket.send(
-            "HTTP/1.1 200 OK\r\nContent-Type:text/html\r\n\r\n".encode()  #! What does the 1.1 here mean? We learn it in class but I've forgotten. (THIS IS A LIKELY QUESTION) IDK
+            "HTTP/1.1 200 OK\r\nContent-Type:text/html\r\n\r\n".encode()
         )
+        # the after the connection with the client is established, the server sends back the above header to indicate the success. HTTP is the protocol, 1.1 is the protocol version, 200 is the status message with means OK. Content-Type tells the client what type of message it should expect to receive from the server. \r\n\r\n indicates the end of the header information.
 
         # Send the content of the requested file to the client
         #! Why is it encoding and sending the characters 1 by 1 instead of encoding them all and sending them all in one "send"? IDK
