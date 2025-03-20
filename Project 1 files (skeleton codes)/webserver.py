@@ -21,11 +21,12 @@ while True:
     # Establish the connection
     print("Ready to serve...")
     connectionSocket, addr = serverSocket.accept()
-    #! why isn't the return address used? What could it be used for?
-    #! how is connectionSocket different from serverSocket? is serverSocket the server connected to the network, and connectionSocket is the server connected to the specific device?
-    #! would this be different for a UDP connection? (vague and hard to answer)
+    # connectionSocket = <socket.socket. fd=728, family=2, type=1, proto=0, laddr=('127.0.0.1', 8080), raddr=('127.0.0.1', 51284)>, 
+        # class instance of Socket that allows communication with the specific client. 
+        # create a new instance instead of binding the "serverSocket" to the specific client, because "serverSocket" still needs to listen for other clients.
+    # addr = ('127.0.0.1', 51284)
+        # addr is a return address and port number of the client that connected to the server. It isn't used because this information is already stored int he returned socket class instance "connectionSocket"
     try:
-        #! What URL do we use to ge to the html file? (http://localhost:8080/simpleWeb.html doesn't work) IDK
         message = connectionSocket.recv(
             1024  #! Why 1024? IDK
         ).decode()  #! What is it decoding from Binary? IDK
