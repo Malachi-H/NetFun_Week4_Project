@@ -55,6 +55,11 @@ while True:
         filename = message.split()[1]
         # calling split and getting the second element gets the file name (url path) that the client is requesting.
         # in this case it's "/simpleweb.html"
+
+        # added to redirect the file if no file path is given
+        if filename == "/":
+            filename = "/index.html"
+        
         f = open(filename[1:])
         # open's the file (removes the slash) (using open with would have been better I think)
         outputdata = f.read()
